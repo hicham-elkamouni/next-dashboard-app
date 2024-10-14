@@ -1,16 +1,19 @@
-'use client';
+"use client";
 
-import { CustomerField, InvoiceForm } from '@/app/lib/definitions';
+import { CustomerField, InvoiceForm } from "@/app/lib/definitions";
 import {
   CheckIcon,
   ClockIcon,
   CurrencyDollarIcon,
+  ExclamationCircleIcon,
   UserCircleIcon,
-} from '@heroicons/react/24/outline';
-import Link from 'next/link';
-import { Button } from '@/app/ui/button';
-import { updateInvoice, State } from '@/app/lib/actions';
-import { useActionState } from 'react';
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
+import Link from "next/link";
+import { Button } from "@/app/ui/button";
+import { updateInvoice, State } from "@/app/lib/actions";
+import { useActionState } from "react";
+import { formatDateToLocal } from "@/app/lib/utils";
 
 export default function EditInvoiceForm({
   invoice,
@@ -105,7 +108,7 @@ export default function EditInvoiceForm({
                   name="status"
                   type="radio"
                   value="pending"
-                  defaultChecked={invoice.status === 'pending'}
+                  defaultChecked={invoice.status === "pending"}
                   className="h-4 w-4 border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                 />
                 <label
@@ -121,7 +124,7 @@ export default function EditInvoiceForm({
                   name="status"
                   type="radio"
                   value="paid"
-                  defaultChecked={invoice.status === 'paid'}
+                  defaultChecked={invoice.status === "paid"}
                   className="h-4 w-4 border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                 />
                 <label
@@ -131,6 +134,44 @@ export default function EditInvoiceForm({
                   Paid <CheckIcon className="h-4 w-4" />
                 </label>
               </div>
+              <div className="flex items-center">
+                <input
+                  id="overdue"
+                  name="status"
+                  type="radio"
+                  value="overdue"
+                  defaultChecked={invoice.status === "overdue"}
+                  className="h-4 w-4 border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
+                />
+                <label
+                  htmlFor="overdue"
+                  className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-yellow-500 px-3 py-1.5 text-xs font-medium text-white"
+                >
+                  Overdue <ExclamationCircleIcon className="h-4 w-4" />
+                </label>
+              </div>
+              <div className="flex items-center">
+                <input
+                  id="canceled"
+                  name="status"
+                  type="radio"
+                  value="canceled"
+                  defaultChecked={invoice.status === "canceled"}
+                  className="h-4 w-4 border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
+                />
+                <label
+                  htmlFor="canceled"
+                  className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-red-500 px-3 py-1.5 text-xs font-medium text-white"
+                >
+                  Canceled <XMarkIcon className="h-4 w-4" />
+                </label>
+              </div>
+              <input name="old_status" type="hidden" value={invoice.status} />
+              <input
+                name="date"
+                type="hidden"
+                value={formatDateToLocal(invoice.date)}
+              />
             </div>
           </div>
           <div id="status-error" aria-live="polite" aria-atomic="true">
